@@ -7,18 +7,19 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// Serve static files from the "public" folder
+// Serve static files from /public
 app.use(express.static(path.join(__dirname, "../public")));
 
-// Directly serve admin and display pages
+// Serve admin.html at /admin
 app.get("/admin", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/admin.html"));
 });
 
+// Serve display.html at /display
 app.get("/display", (req, res) => {
   res.sendFile(path.join(__dirname, "../public/display.html"));
-});
 
+});
 // --- Store area statuses persistently in memory ---
 const areaStatuses = {
   orion: "--",
