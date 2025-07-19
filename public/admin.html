@@ -154,7 +154,7 @@
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io();
+    const socket = io("https://beaconcallbell.onrender.com");
 
     function callPatient(area, cubicle) {
       const name = document.getElementById("patientName").value;
