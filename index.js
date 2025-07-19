@@ -7,7 +7,17 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Serve static files from the "public" folder
 app.use(express.static(path.join(__dirname, "../public")));
+
+// Directly serve admin and display pages
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/admin.html"));
+});
+
+app.get("/display", (req, res) => {
+  res.sendFile(path.join(__dirname, "../public/display.html"));
+});
 
 // --- Store area statuses persistently in memory ---
 const areaStatuses = {
