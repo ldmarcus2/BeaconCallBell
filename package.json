@@ -81,8 +81,8 @@
     "ws": "^8.17.1"
   },
   "devDependencies": {},
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+"scripts": {
+  "start": "node index.js"
   },
   "keywords": [],
   "author": "",
