@@ -7,6 +7,20 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+app.use(cors({
+  origin: 'https://beaconcallbell.onrender.com', // allow your frontend
+  methods: ['GET', 'POST']
+}));
+
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: 'https://beaconcallbell.onrender.com', // allow your frontend
+    methods: ['GET', 'POST']
+  }
+});
+
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, "../public")));
 
