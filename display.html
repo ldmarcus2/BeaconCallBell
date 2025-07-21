@@ -135,6 +135,11 @@
       alertSound.currentTime = 0;
       alertSound.play();
 
+     // Restart flash animation
+     displayBox.classList.remove("flash");
+     void displayBox.offsetWidth; // trigger reflow
+     displayBox.classList.add("flash");
+      
      // Clear any previous timeout for removing flash
      if (flashTimeout) clearTimeout(flashTimeout);
 
@@ -144,7 +149,7 @@
     flashTimeout = null; // clear the timeout variable
     }, 10000);
 
-      // Play sound again after 10 seconds
+      // Play sound again after 8 seconds
       setTimeout(() => {
       alertSound.currentTime = 0;
       alertSound.play();
