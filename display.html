@@ -122,7 +122,7 @@
 
     // Display patient names
     socket.on("displayPatient", (data) => {
-      const text = `${data.name} \nPlease go to \nCUBICLE ${data.cubicle}`;
+      const text = `${data.name} \nPlease go to CUBICLE ${data.cubicle}`;
       const id = Date.now();
 
       if (slots.length >= 2) slots.shift();
