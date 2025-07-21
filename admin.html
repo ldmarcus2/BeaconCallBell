@@ -203,6 +203,26 @@ socket.on("updateStatus", ({ area, status }) => {
   if (current) current.innerText = status;
 });
 
+socket.on("connect_error", (error) => {
+  showError("Connection error: Unable to connect to server.");
+  console.error("Socket connect_error:", error);
+});
+
+socket.on("connect_timeout", () => {
+  showError("Connection timeout: Server took too long to respond.");
+  console.error("Socket connect_timeout");
+});
+
+socket.on("reconnect_failed", () => {
+  showError("Reconnection failed: Could not reconnect to server.");
+  console.error("Socket reconnect_failed");
+});
+
+socket.on("error", (error) => {
+  showError("Socket error occurred.");
+  console.error("Socket error:", error);
+});
+    
   </script>
 </body>
 </html>
