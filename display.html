@@ -120,6 +120,8 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    let flashTimeout;
+    
     // Display patient names
     socket.on("displayPatient", (data) => {
       const text = `${data.name} \nPlease go to CUBICLE ${data.cubicle}`;
@@ -133,14 +135,14 @@
       alertSound.currentTime = 0;
       alertSound.play();
 
-  // Restart flash animation
-  displayBox.classList.remove("flash");
-  // Trigger reflow to restart animation
-  void displayBox.offsetWidth;
-  displayBox.classList.add("flash");
+     // Clear any previous timeout for removing flash
+     if (flashTimeout) clearTimeout(flashTimeout);
 
-  // Remove flash after 10 seconds
-  setTimeout(() => displayBox.classList.remove("flash"), 10000);
+    // Set new timeout to remove flash after 10 seconds
+    flashTimeout = setTimeout(() => {
+    displayBox.classList.remove("flash");
+    flashTimeout = null; // clear the timeout variable
+    }, 10000);
 
       // Play sound again after 10 seconds
       setTimeout(() => {
