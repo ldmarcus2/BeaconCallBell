@@ -133,9 +133,14 @@
       alertSound.currentTime = 0;
       alertSound.play();
 
-      // Visual flash
-      displayBox.classList.add("flash");
-      setTimeout(() => displayBox.classList.remove("flash"), 10000);
+  // Restart flash animation
+  displayBox.classList.remove("flash");
+  // Trigger reflow to restart animation
+  void displayBox.offsetWidth;
+  displayBox.classList.add("flash");
+
+  // Remove flash after 10 seconds
+  setTimeout(() => displayBox.classList.remove("flash"), 10000);
 
       // Play sound again after 10 seconds
       setTimeout(() => {
