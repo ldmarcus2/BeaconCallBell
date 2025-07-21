@@ -137,6 +137,12 @@
       displayBox.classList.add("flash");
       setTimeout(() => displayBox.classList.remove("flash"), 10000);
 
+      // Play sound again after 10 seconds
+      setTimeout(() => {
+      alertSound.currentTime = 0;
+      alertSound.play();
+     }, 10000);
+      
       // Auto-remove after 20s
       setTimeout(() => {
         slots = slots.filter(s => s.id !== id);
