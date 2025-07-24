@@ -152,9 +152,23 @@
 
   </div>
 
-  <script src="/socket.io/socket.io.js"></script>
+<div id="statusBox" style="margin-top: 30px; color: white; background: red; padding: 10px 20px; border-radius: 5px; display: none; max-width: 600px; text-align: center;">
+  <!-- Error messages will appear here -->
+</div>
+
+  <script src="https://beaconcallbell2.onrender.com/socket.io/socket.io.js"></script>
   <script>
-    const socket = io("https://beaconcallbell.onrender.com");
+    const socket = io("https://beaconcallbell2.onrender.com");
+
+function showError(message) {
+  const box = document.getElementById("statusBox");
+  box.innerText = message;
+  box.style.display = "block";
+  setTimeout(() => {
+    box.style.display = "none";
+    box.innerText = "";
+  }, 5000); // hide after 5 seconds
+}
 
     function callPatient(area, cubicle) {
       const name = document.getElementById("patientName").value;
@@ -189,6 +203,26 @@ socket.on("updateStatus", ({ area, status }) => {
   if (current) current.innerText = status;
 });
 
+socket.on("connect_error", (error) => {
+  showError("Connection error: Unable to connect to server.");
+  console.error("Socket connect_error:", error);
+});
+
+socket.on("connect_timeout", () => {
+  showError("Connection timeout: Server took too long to respond.");
+  console.error("Socket connect_timeout");
+});
+
+socket.on("reconnect_failed", () => {
+  showError("Reconnection failed: Could not reconnect to server.");
+  console.error("Socket reconnect_failed");
+});
+
+socket.on("error", (error) => {
+  showError("Socket error occurred.");
+  console.error("Socket error:", error);
+});
+    
   </script>
 </body>
 </html>
