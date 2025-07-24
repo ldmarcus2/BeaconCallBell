@@ -20,6 +20,22 @@ app.use(cors({
   methods: ["GET", "POST"]
 }));
 
+// IP Whitelist Middleware
+const allowedIPs = ['109.176.113.130', '109.176.113.131'];
+const forbiddenRedirectURL = 'https://beaconcallbell.onrender.com/403.html'; // Replace with your real 403 page URL
+
+app.use((req, res, next) => {
+  const ip = req.headers['x-forwarded-for']?.split(',')[0] || req.connection.remoteAddress;
+  const cleanedIP = ip.replace('::ffff:', ''); // Handle IPv4-mapped IPv6 addresses
+
+  if (allowedIPs.includes(cleanedIP)) {
+    next();
+  } else {
+    console.log(`Blocked IP: ${cleanedIP}`);
+    return res.redirect(forbiddenRedirectURL);
+  }
+});
+
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, "../public")));
 
