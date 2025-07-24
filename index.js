@@ -21,16 +21,16 @@ app.use(cors({
 }));
 
 // Serve static files from /public
-app.use(express.static(path.join(__dirname, "../public")));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Serve admin.html at /admin
 app.get("/admin", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/admin.html"));
+  res.sendFile(path.join(__dirname, "public/admin.html"));
 });
 
 // Serve display.html at /display
 app.get("/display", (req, res) => {
-  res.sendFile(path.join(__dirname, "../public/display.html"));
+  res.sendFile(path.join(__dirname, "public/display.html"));
 });
 
 // -------- Persistent Status Handling --------
@@ -84,3 +84,5 @@ io.on("connection", (socket) => {
 server.listen(3000, () => {
   console.log("Server running on http://localhost:3000");
 });
+
+
