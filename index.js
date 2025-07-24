@@ -3,22 +3,44 @@ const http = require("http");
 const { Server } = require("socket.io");
 const path = require("path");
 const fs = require("fs");
-const cors = require("cors");
-
 const app = express();
 const server = http.createServer(app);
 
-const io = new Server(server, {
-  cors: {
-    origin: "https://beaconcallbell.onrender.com",
-    methods: ["GET", "POST"]
+// Allowlist at the top
+const allowedIPs = ["109.176.113.130", "109.176.113.131"];
+const forbiddenPage = path.join(__dirname, "public/403.html");
+
+app.set("trust proxy", true); // trust proxy if using behind Render/Nginx
+
+// IP Restriction Middleware
+app.use((req, res, next) => {
+  const clientIP = req.headers["x-forwarded-for"]?.split(",")[0] || req.connection.remoteAddress;
+
+  // Remove IPv6 prefix if present
+  const normalizedIP = clientIP.replace(/^::ffff:/, "");
+
+  if (allowedIPs.includes(normalizedIP)) {
+    next();
+  } else {
+    res.status(403).sendFile(forbiddenPage);
   }
 });
 
-app.use(cors({
-  origin: "https://beaconcallbell.onrender.com",
-  methods: ["GET", "POST"]
-}));
+// Socket.IO setup (after IP middleware defined)
+const io = new Server(server);
+
+// Restrict Socket.IO connections too
+io.use((socket, next) => {
+  const clientIP = socket.handshake.headers["x-forwarded-for"]?.split(",")[0] || socket.handshake.address;
+  const normalizedIP = clientIP.replace(/^::ffff:/, "");
+
+  if (allowedIPs.includes(normalizedIP)) {
+    next();
+  } else {
+    console.log(`Blocked socket connection from IP: ${normalizedIP}`);
+    next(new Error("Forbidden"));
+  }
+});
 
 // Serve static files from /public
 app.use(express.static(path.join(__dirname, "public")));
