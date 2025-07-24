@@ -18,10 +18,11 @@
     }
 
     .names {
-      margin: 20px auto;
+      margin: 0px auto;
       padding: 30px;
       max-width: 1500px;
     }
+
 
     .name {
       display: flex;
@@ -31,8 +32,8 @@
       border: 2px solid red;
       margin: 20px 0;
       padding: 20px;
-      font-size: 5em;
-      min-height: 200px;
+      font-size: 6.5em;
+      min-height: 225px;
       transition: background-color 0.5s;
       white-space: pre-line;
     }
@@ -80,7 +81,7 @@
   </div>
 
   <!-- Area statuses -->
-  <div id="area-statuses" style="display: flex; justify-content: space-between; margin-top: 40px; font-size: 2.8em;">
+  <div id="area-statuses" style="display: flex; justify-content: space-between; margin-top: 0px; font-size: 2.8em;">
     <div id="orion-status" style="text-align: left; flex: 1;">Orion is: --</div>
     <div id="pegasus-status" style="text-align: center; flex: 1;">Pegasus is: --</div>
     <div id="phoenix-status" style="text-align: right; flex: 1;">Phoenix is: --</div>
@@ -90,9 +91,9 @@
   <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
 
   <!-- Socket.io and behavior script -->
-  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://beaconcallbell2.onrender.com/socket.io/socket.io.js"></script>
   <script>
-    const socket = io();
+    const socket = io("https://beaconcallbell2.onrender.com");
     const name1 = document.getElementById("name1");
     const name2 = document.getElementById("name2");
     const displayBox = document.getElementById("patient-display");
@@ -120,9 +121,11 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    let flashTimeout;
+    
     // Display patient names
     socket.on("displayPatient", (data) => {
-      const text = `${data.name} \nPlease go to \nCUBICLE ${data.cubicle}`;
+      const text = `${data.name} \nPlease go to CUBICLE ${data.cubicle}`;
       const id = Date.now();
 
       if (slots.length >= 2) slots.shift();
@@ -133,10 +136,26 @@
       alertSound.currentTime = 0;
       alertSound.play();
 
-      // Visual flash
-      displayBox.classList.add("flash");
-      setTimeout(() => displayBox.classList.remove("flash"), 10000);
+     // Restart flash animation
+     displayBox.classList.remove("flash");
+     void displayBox.offsetWidth; // trigger reflow
+     displayBox.classList.add("flash");
+      
+     // Clear any previous timeout for removing flash
+     if (flashTimeout) clearTimeout(flashTimeout);
 
+    // Set new timeout to remove flash after 10 seconds
+    flashTimeout = setTimeout(() => {
+    displayBox.classList.remove("flash");
+    flashTimeout = null; // clear the timeout variable
+    }, 10000);
+
+      // Play sound again after 8 seconds
+      setTimeout(() => {
+      alertSound.currentTime = 0;
+      alertSound.play();
+     }, 8000);
+      
       // Auto-remove after 20s
       setTimeout(() => {
         slots = slots.filter(s => s.id !== id);
