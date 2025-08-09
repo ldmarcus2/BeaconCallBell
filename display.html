@@ -91,9 +91,9 @@
   <audio id="alertSound" src="alert.mp3" preload="auto"></audio>
 
   <!-- Socket.io and behavior script -->
-  <script src="https://beaconcallbell2.onrender.com/socket.io/socket.io.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
   <script>
-    const socket = io("https://beaconcallbell2.onrender.com");
+    const socket = io();
     const name1 = document.getElementById("name1");
     const name2 = document.getElementById("name2");
     const displayBox = document.getElementById("patient-display");
